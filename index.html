@@ -12,6 +12,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: whitesmoke;
         }
     </style>
 </head>
@@ -37,18 +38,21 @@ var config = {
     var passaro;
     // A função preload() é usada para carregar os assets do jogo, como imagens, áudios e etc.
     function preload() {
-        this.load.image('bg', 'assets/bg_space.png');
+        this.load.image('bg', 'assets/background_ceu.jpg');
+        this.load.image('cloud', 'assets/cloud-icon.png'); 
         this.load.spritesheet('bird', 'assets/bird-red.png', { frameWidth: 75, frameHeight: 75 });
     }
     // A função create() é usada para criar os elementos do jogo, como personagens, inimigos, cenários e etc.
     function create() {
-        this.add.image(400, 300, 'bg').setScale(1.2);
+        this.add.image(400, 300, 'bg').setScale(1.8);
+        nuvem1 = this.add.image(100, 100, 'cloud').setScale(0.18);
+        nuvem2 = this.add.image(700, 300, 'cloud').setScale(0.25);
         passaro = this.add.sprite(100, 300, 'bird').setScale(1.3);
 
         this.anims.create({
             key: 'fly',
             frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 7 }),
-            frameRate: 10,
+            frameRate: 8,
             repeat: -1
         });
         passaro.anims.play('fly', true);
@@ -60,6 +64,17 @@ var config = {
     }
     // A função update() é usada para atualizar o jogo, como movimentação dos personagens, colisões e etc.
     function update() { 
+
+        nuvem1.x += 2;
+        if (nuvem1.x > 900) {
+            nuvem1.x = -100;
+        }
+
+        nuvem2.x -= 3;
+        if (nuvem2.x < -100) {
+            nuvem2.x = 900;
+        }
+
         if (passaro.x === 100) {
             passaro.setFlip(false, false);
             // Fiquei com dúvida nessa parte pois não entendi como posso usar o método ida no objeto passaro sem ter criado este método antes;
@@ -70,10 +85,10 @@ var config = {
             passaro.ida = false;
         }
         if (passaro.x < 700 && passaro.ida) {
-            passaro.x += 5
+            passaro.x += 5;
         }
         if (passaro.x > 100 && !passaro.ida) {
-            passaro.x -= 5
+            passaro.x -= 5;
         }
         // Movimento vertical do pássaro, usando função senoidal para simular um voo mais fluido e natural
         passaro.y = initialY + amplitude * Math.sin(frequencia * passaro.x);

@@ -56,7 +56,8 @@ var config = {
             repeat: -1
         });
         passaro.anims.play('fly', true);
-
+        passaro.setDepth(1);
+        nuvem2.setDepth(2)
         // Variáveis para movimento senoidal do pássaro
         initialY = passaro.y; // Armazena a posição inicial do pássaro no eixo Y
         amplitude = 75; // Amplitude do movimento, determina o quão alto/baixo o pássaro vai
@@ -65,16 +66,24 @@ var config = {
     // A função update() é usada para atualizar o jogo, como movimentação dos personagens, colisões e etc.
     function update() { 
 
-        nuvem1.x += 2;
-        if (nuvem1.x > 900) {
-            nuvem1.x = -100;
+        for (let i = 0; i < 3; i++) {
+            nuvem1.x += i;
+            
+            if (nuvem1.x > 900) {
+                nuvem1.x = -100;
+        }  
         }
-
-        nuvem2.x -= 3;
-        if (nuvem2.x < -100) {
-            nuvem2.x = 900;
+        
+        for (let i = 0; i < 3; i++) {
+            nuvem2.x -= i;
+            
+            if (nuvem2.x < -100) {
+                nuvem2.x = 900;
+            }
         }
-
+// Check for collision between bird and cloud
+       
+        
         if (passaro.x === 100) {
             passaro.setFlip(false, false);
             // Fiquei com dúvida nessa parte pois não entendi como posso usar o método ida no objeto passaro sem ter criado este método antes;
@@ -85,10 +94,10 @@ var config = {
             passaro.ida = false;
         }
         if (passaro.x < 700 && passaro.ida) {
-            passaro.x += 5;
+            passaro.x += 4;
         }
         if (passaro.x > 100 && !passaro.ida) {
-            passaro.x -= 5;
+            passaro.x -= 4;
         }
         // Movimento vertical do pássaro, usando função senoidal para simular um voo mais fluido e natural
         passaro.y = initialY + amplitude * Math.sin(frequencia * passaro.x);

@@ -34,6 +34,7 @@ var config = {
     };
 
     var game = new Phaser.Game(config);
+    var passaro;
     // A função preload() é usada para carregar os assets do jogo, como imagens, áudios e etc.
     function preload() {
         this.load.image('bg', 'assets/bg_space.png');
@@ -42,12 +43,42 @@ var config = {
     // A função create() é usada para criar os elementos do jogo, como personagens, inimigos, cenários e etc.
     function create() {
         this.add.image(400, 300, 'bg').setScale(1.2);
-        this.add.sprite(100, 300, 'bird').setScale(1.3);
+        passaro = this.add.sprite(100, 300, 'bird').setScale(1.3);
 
+        this.anims.create({
+            key: 'fly',
+            frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 7 }),
+            frameRate: 10,
+            repeat: -1
+        });
+        passaro.anims.play('fly', true);
+
+        // Variáveis para movimento senoidal do pássaro
+        initialY = passaro.y; // Armazena a posição inicial do pássaro no eixo Y
+        amplitude = 75; // Amplitude do movimento, determina o quão alto/baixo o pássaro vai
+        frequencia = 0.025; // Frequência do movimento, determina a rapidez do movimento
     }
     // A função update() é usada para atualizar o jogo, como movimentação dos personagens, colisões e etc.
     function update() { 
-
+        if (passaro.x === 100) {
+            passaro.setFlip(false, false);
+            // Fiquei com dúvida nessa parte pois não entendi como posso usar o método ida no objeto passaro sem ter criado este método antes;
+            passaro.ida = true;
+        }
+        if (passaro.x === 700) {
+            passaro.setFlip(true, false);
+            passaro.ida = false;
+        }
+        if (passaro.x < 700 && passaro.ida) {
+            passaro.x += 5
+        }
+        if (passaro.x > 100 && !passaro.ida) {
+            passaro.x -= 5
+        }
+        // Movimento vertical do pássaro, usando função senoidal para simular um voo mais fluido e natural
+        passaro.y = initialY + amplitude * Math.sin(frequencia * passaro.x);
+        // Posição inicial do pássaro + amplitude * seno da (frequência * posição do pássaro no eixo X)
+        
     }
 
 </script>

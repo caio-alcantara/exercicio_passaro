@@ -13,14 +13,6 @@
             height: 100vh;
             margin: 0;
             background-color: whitesmoke;
-            body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-                background-color: whitesmoke;
-            }
         }
     </style>
 </head>
@@ -92,20 +84,18 @@ var config = {
 // Check for collision between bird and cloud
        
         
-        if (passaro.x === 100) {
-            passaro.setFlip(false, false);
-            // Fiquei com dúvida nessa parte pois não entendi como posso usar o método ida no objeto passaro sem ter criado este método antes;
-            passaro.ida = true;
+       if (passaro.x === 100) {
+        passaro.ida = true;
+        passaro.setFlip(false, false);
+       }
+       if (passaro.x === 700) {
+        passaro.ida = false;
+        passaro.setFlip(true, false);
         }
-        if (passaro.x === 700) {
-            passaro.setFlip(true, false);
-            passaro.ida = false;
-        }
-        if (passaro.x < 700 && passaro.ida) {
-            passaro.x += 4;
-        }
-        if (passaro.x > 100 && !passaro.ida) {
-            passaro.x -= 4;
+        if (passaro.ida) {
+            passaro.x += 5;
+        } else {
+            passaro.x -= 5;
         }
         // Movimento vertical do pássaro, usando função senoidal para simular um voo mais fluido e natural
         passaro.y = initialY + amplitude * Math.sin(frequencia * passaro.x);

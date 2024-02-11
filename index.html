@@ -35,23 +35,38 @@ var config = {
     };
 
     var game = new Phaser.Game(config);
-    var passaro;
+    var passaro
     var musica;
+    var isMuted = false;
+    var botaoMudo;
     // A função preload() é usada para carregar os assets do jogo, como imagens, áudios e etc.
     function preload() {
         this.load.image('bg', 'assets/background_ceu.jpg');
         this.load.image('cloud', 'assets/cloud-icon.png'); 
         this.load.spritesheet('bird', 'assets/bird-red.png', { frameWidth: 75, frameHeight: 75 });
         this.load.audio("musica", "assets/the-process.mp3");
+        this.load.image('audioOn', 'assets/audio-icon.png');
+        this.load.image('audioOff', 'assets/muteAudio-icon.png');
     }
+
+    function toggleMute(){
+            isMuted = !isMuted;
+            musica.setMute(isMuted);
+            botaoMudo.setTexture(isMuted ? 'audioOff' : 'audioOn');
+        }   
+
     // A função create() é usada para criar os elementos do jogo, como personagens, inimigos, cenários e etc.
     function create() {
+        botaoMudo = this.add.image(16, 16, 'audioOn').setScale(0.2).setOrigin(0, 0).setInteractive();
+        botaoMudo.setDepth(3);
+        botaoMudo.on('pointerdown', function(){
+            toggleMute();
+        })
+
         musica = this.sound.add("musica");
         musica.volume = 0.2;
         musica.loop = true;
         musica.play();
-
-        
 
         this.add.image(400, 300, 'bg').setScale(1.8);
         nuvem1 = this.add.image(100, 100, 'cloud').setScale(0.18);

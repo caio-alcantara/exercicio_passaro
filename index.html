@@ -41,6 +41,14 @@ var config = {
     var musica;
     var isMuted = false;
     var botaoMudo;
+    var resposta1, resposta2;
+
+    // Função que alterna entre o estado de mudo e não mudo da música
+    function toggleMute(){
+            isMuted = !isMuted;
+            musica.setMute(isMuted);
+            botaoMudo.setTexture(isMuted ? 'audioOff' : 'audioOn');
+        }   
 
     // A função preload() é usada para carregar os assets do jogo, como imagens, áudios e etc.
     function preload() {
@@ -52,16 +60,8 @@ var config = {
         this.load.image('audioOff', 'assets/muteAudio-icon.png');
     }
 
-    // Função que alterna entre o estado de mudo e não mudo da música
-    function toggleMute(){
-            isMuted = !isMuted;
-            musica.setMute(isMuted);
-            botaoMudo.setTexture(isMuted ? 'audioOff' : 'audioOn');
-        }   
-
     // A função create() é usada para criar os elementos do jogo, como personagens, inimigos, cenários e etc.
     function create() {
-
         // Botão mudo
         botaoMudo = this.add.image(16, 16, 'audioOn').setScale(0.2).setOrigin(0, 0).setInteractive();
         botaoMudo.setDepth(3);
@@ -98,17 +98,17 @@ var config = {
         amplitude = 100; // Amplitude do movimento, determina o quão alto/baixo o pássaro vai
         frequencia = 0.025; // Frequência do movimento, determina a rapidez do movimento
     }
+
     // A função update() é usada para atualizar o jogo, como movimentação dos personagens, colisões e etc.
     function update() { 
-
+        // Movimento horizontal das nuvens
         for (let i = 0; i < 3; i++) {
             nuvem1.x += i;
             
             if (nuvem1.x > 900) {
                 nuvem1.x = -100;
-        }  
+            }  
         }
-        
         for (let i = 0; i < 3; i++) {
             nuvem2.x -= i;
             
@@ -116,7 +116,7 @@ var config = {
                 nuvem2.x = 900;
             }
         }       
-        
+        // Movimento horizontal do pássaro
        if (passaro.x === 100) {
         passaro.ida = true;
         passaro.setFlip(false, false);
@@ -126,10 +126,15 @@ var config = {
         passaro.setFlip(true, false);
         }
         if (passaro.ida) {
+            resposta1 = "Aqui, o pássaro está indo para a direita, de modo que a sua posição no eixo X é incrementada em 5 a cada frame."
             passaro.x += 5;
+            console.log(resposta1);
         } else {
+            resposta2 = "Aqui, o pássaro está indo para a esquerda, de modo que a sua posição no eixo X é decrementada em 5 a cada frame."
             passaro.x -= 5;
+            console.log(resposta2);
         }
+
         // Movimento vertical do pássaro, usando função senoidal para simular um voo mais fluido e natural
         passaro.y = initialY + amplitude * Math.sin(frequencia * passaro.x);
         // Posição inicial do pássaro + amplitude * seno da (frequência * posição do pássaro no eixo X)
